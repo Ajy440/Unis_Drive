@@ -2,6 +2,9 @@ var g_active_drive = "";
 $(document).ready(function () {
   const active_drive = localStorage.getItem("currDrive");
   g_active_drive = active_drive;
+  document.getElementById("drivenamep").innerHTML =
+    "<h3><b>" + localStorage.getItem("currDriveName") + "</b></h3>";
+  document.getElementById("uploadeAlert").style.visibility = "hidden";
   console.log(g_active_drive);
   getUserPermission();
   renderMedia();
@@ -21,8 +24,15 @@ var db = firebase.firestore();
 var storage = firebase.storage().ref();
 
 function uploadHandler() {
+  document.getElementById("uploadeAlert").style.visibility = "visible";
   let media = document.getElementById("uploader").files[0];
-  var fileName = document.getElementById("uploader").files[0].name;
+  var fileName =
+    "Image-" +
+    new Date()
+      .toLocaleString()
+      .replace(/ /g, "")
+      .replaceAll("/", "-")
+      .replaceAll(",", "-");
   var imageRef = storage.child(g_active_drive + "/" + fileName);
   var uploadTask = imageRef.put(media);
   uploadTask.on(
@@ -46,6 +56,7 @@ function uploadHandler() {
     () => {
       uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
         console.log("File available at", downloadURL);
+        document.getElementById("uploadeAlert").style.visibility = "hidden";
         addFileinfotodb(downloadURL, fileName);
       });
     }
@@ -77,29 +88,45 @@ function addFileinfotodb(url, fileName) {
 }
 
 function renderMedia() {
-  document.getElementById("root").innerHTML = "";
+  //
   var driveRef = db
     .collection("drive" + "/" + g_active_drive + "/" + "media")
     .get()
     .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data().name);
-        $("#root").append(
-          ` <div class="max-w-sm rounded overflow-hidden shadow-lg">         <img           class="w-full"           src=` +
-            doc.data().url +
-            `           alt="Sunset in the mountains"         />         <div class="px-6 py-4">           <div class="font-bold text-xl mb-2">` +
-            doc.data().name +
-            `</div>      </div>         <div class="px-6 pt-4 pb-2">           <span             class="               inline-block               bg-gray-200               rounded-full               px-3               py-1               text-sm               font-semibold               text-gray-700               mr-2               mb-2             "             >#photography</span           >           <span             class="               inline-block               bg-gray-200               rounded-full               px-3               py-1               text-sm               font-semibold               text-gray-700               mr-2               mb-2             "             >#travel</span           > <a href="#" class="deleteBtn bg-red-500 hover:bg-red-700 text-white text-center py-2 px-4 rounded-full " onClick=deleteHandler('` +
-            doc.id +
-            `','` +
-            doc.data().name +
-            `')>
+      if (querySnapshot.size == 0) {
+        document.getElementById("root").innerHTML = "";
+        console.log("empty");
+        $("#root").append(`<div
+       class="col-span-5"
+       id="nofiles"
+       style="
+         height: 95vh;
+         background-image: url(../noimage.png);
+         background-size: contain;
+         background-repeat: no-repeat;
+       "
+     >`);
+      } else {
+        document.getElementById("root").innerHTML = "";
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data().name);
+          $("#root").append(
+            ` <div class="max-w-sm rounded overflow-hidden shadow-lg">         <img           class="w-full"           src=` +
+              doc.data().url +
+              `           alt="Sunset in the mountains"         />         <div class="px-6 py-4">           <div class="font-bold text-xl mb-2">` +
+              doc.data().name +
+              `</div>      </div>         <div class="px-6 pt-4 pb-2">           <span             class="               inline-block               bg-gray-200               rounded-full               px-3               py-1               text-sm               font-semibold               text-gray-700               mr-2               mb-2             "             >#photography</span           >           <span             class="               inline-block               bg-gray-200               rounded-full               px-3               py-1               text-sm               font-semibold               text-gray-700               mr-2               mb-2             "             >#travel</span           > <a href="#" class="deleteBtn bg-red-500 hover:bg-red-700 text-white text-center py-2 px-4 rounded-full " onClick=deleteHandler('` +
+              doc.id +
+              `','` +
+              doc.data().name +
+              `')>
             Delete
           </a>   </div>       </div>`
-        );
-      });
-      getUserPermission();
+          );
+        });
+        getUserPermission();
+      }
     })
     .catch((error) => {
       console.log("Error getting documents: ", error);

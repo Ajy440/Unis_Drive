@@ -20,29 +20,7 @@
   </head>
   <body>
     <!-- Modal toggle -->
-    <button
-      class="
-        block
-        text-white
-        bg-blue-700
-        hover:bg-blue-800
-        focus:ring-4 focus:ring-blue-300
-        font-medium
-        rounded-lg
-        text-sm
-        px-5
-        py-2.5
-        text-center
-        dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
-      "
-      type="button"
-      data-modal-toggle="default-modal"
-      id="modal-toggle"
-      onclick="loadaccesslist()"
-    >
-      Manage Users
-    </button>
-
+    <div id="drivenamep" class="ml-1 mb-1">My_drive</div>
     <!-- Main modal -->
     <div
       id="default-modal"
@@ -211,31 +189,112 @@
       </div>
     </div>
 
-    <input type="file" onchange="uploadHandler(event)" id="uploader" />
+    <div class="grid grid-cols-6">
+      <div class="h-screen bg-red-100 p-2">
 
-    <a
-      href="#"
-      class="
-        bg-blue-500
-        hover:bg-blue-700
-        text-white text-center
-        py-2
-        px-4
-        rounded-full
+        <ul class="bg-white rounded-lg border border-gray-200  text-gray-900 text-sm font-medium dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+          <li class="px-4 py-2 border-b border-gray-200 w-full rounded-t-lg dark:border-gray-600"><input type="file" onchange="uploadHandler(event)" id="uploader" />
+          </li>
+          <li class="px-4 py-2 border-b border-gray-200 w-full dark:border-gray-600"><button
+            class="
+              block
+              text-white
+              focus:ring-4 focus:ring-blue-300
+              font-medium
+              rounded-lg
+              text-sm
+              px-5
+              py-2.5
+              text-center
+              
+            "
+            type="button"
+            data-modal-toggle="default-modal"
+            id="modal-toggle"
+            onclick="loadaccesslist()"
+          >
+            Manage Users
+          </button></li>
+          <li class="px-4 py-2 border-b border-gray-200 w-full dark:border-gray-600"> <button
+            href="#"
+            class="
+            block
+            text-white
+            focus:ring-4 focus:ring-blue-300
+            font-medium
+            rounded-lg
+            text-sm
+            px-5
+            py-2.5
+            text-center
+            "
+            onclick="navigatetoDriveMenu()"
+          >
+            Back to Drive
+          </button></li>
+          <li class="px-4 py-2 w-full rounded-b-lg"><button
+            href="#"
+            class="
+            block
+            text-white
+            focus:ring-4 focus:ring-blue-300
+            font-medium
+            rounded-lg
+            text-sm
+            px-5
+            py-2.5
+            text-center
+            "
+  
+          >
+            To be done
+          </button></li>
+      </ul>
+
+
+
+
+        
+       
+
+        
+      </div>
+      <div class="h-screen col-span-5">
+        <div id="root" class="grid grid-cols-5 gap-4 content-start p-1">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      style="
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 80%;
+        height: auto;
       "
-      onclick="navigatetoDriveMenu()"
+      class="
+        bg-blue-100
+        rounded-lg
+        p-4
+        mb-4
+        text-sm text-blue-700
+        dark:bg-blue-200 dark:text-blue-800
+      "
+      role="alert"
+      id="uploadeAlert"
     >
-      Back to Drive
-    </a>
-
-    <div id="root" class="grid grid-cols-5 gap-4 content-start"></div>
-
-    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-      <div
-        class="bg-blue-600 h-2.5 rounded-full"
-        style="width: 0%"
-        id="uploadProgress"
-      ></div>
+      <span class="font-medium"
+        ><div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+          <div
+            class="bg-blue-600 h-2.5 rounded-full"
+            style="width: 0%"
+            id="uploadProgress"
+          ></div></div
+      ></span>
     </div>
   </body>
   <script src="https://unpkg.com/@themesberg/flowbite@1.2.0/dist/flowbite.bundle.js"></script>

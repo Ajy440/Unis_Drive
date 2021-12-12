@@ -64,6 +64,8 @@ function getDriveDetaile(driveid) {
             px-4
             rounded-full"      onClick = openDrive('` +
             driveid +
+            `','` +
+            doc.data().name +
             `')       >Open</span           >         </div>       </div>`
         );
       } else {
@@ -76,9 +78,10 @@ function getDriveDetaile(driveid) {
     });
 }
 
-function openDrive(id) {
+function openDrive(id, name) {
   //console.log("Opened:", id);
   localStorage.setItem("currDrive", id);
+  localStorage.setItem("currDriveName", name);
   window.location.replace("driveMain.html");
 }
 
