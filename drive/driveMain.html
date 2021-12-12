@@ -17,7 +17,6 @@
       rel="stylesheet"
       href="https://unpkg.com/@themesberg/flowbite@1.2.0/dist/flowbite.min.css"
     />
-    <script src="driveMain.js"></script>
   </head>
   <body>
     <!-- Modal toggle -->
@@ -39,8 +38,9 @@
       type="button"
       data-modal-toggle="default-modal"
       id="modal-toggle"
+      onclick="loadaccesslist()"
     >
-      Add Users
+      Manage Users
     </button>
 
     <!-- Main modal -->
@@ -139,8 +139,15 @@
               </select>
             </p>
 
-            <p>Following users has access to this drive.</p>
-            <div id="accesslist"></div>
+            <p
+              class="text-gray-700 text-base leading-relaxed dark:text-gray-400"
+            >
+              Following users has access to this drive.
+            </p>
+            <div
+              id="accesslist"
+              class="text-gray-500 text-base leading-relaxed dark:text-gray-400"
+            ></div>
           </div>
           <!-- Modal footer -->
           <div
@@ -221,7 +228,16 @@
       Back to Drive
     </a>
 
-    <div id="root" class="grid grid-cols-3 gap-4 content-start"></div>
+    <div id="root" class="grid grid-cols-5 gap-4 content-start"></div>
+
+    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+      <div
+        class="bg-blue-600 h-2.5 rounded-full"
+        style="width: 0%"
+        id="uploadProgress"
+      ></div>
+    </div>
   </body>
   <script src="https://unpkg.com/@themesberg/flowbite@1.2.0/dist/flowbite.bundle.js"></script>
+  <script src="driveMain.js"></script>
 </html>

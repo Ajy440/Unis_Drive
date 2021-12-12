@@ -30,6 +30,7 @@ function uploadHandler() {
     (snapshot) => {
       var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       console.log("Upload is " + progress + "% done");
+      document.getElementById("uploadProgress").style.width = progress + "%";
       switch (snapshot.state) {
         case firebase.storage.TaskState.PAUSED: // or 'paused'
           console.log("Upload is paused");
@@ -89,7 +90,7 @@ function renderMedia() {
             doc.data().url +
             `           alt="Sunset in the mountains"         />         <div class="px-6 py-4">           <div class="font-bold text-xl mb-2">` +
             doc.data().name +
-            `</div>      </div>         <div class="px-6 pt-4 pb-2">           <span             class="               inline-block               bg-gray-200               rounded-full               px-3               py-1               text-sm               font-semibold               text-gray-700               mr-2               mb-2             "             >#photography</span           >           <span             class="               inline-block               bg-gray-200               rounded-full               px-3               py-1               text-sm               font-semibold               text-gray-700               mr-2               mb-2             "             >#travel</span           > <a href="#" class="bg-red-500 hover:bg-red-700 text-white text-center py-2 px-4 rounded-full" onClick=deleteHandler('` +
+            `</div>      </div>         <div class="px-6 pt-4 pb-2">           <span             class="               inline-block               bg-gray-200               rounded-full               px-3               py-1               text-sm               font-semibold               text-gray-700               mr-2               mb-2             "             >#photography</span           >           <span             class="               inline-block               bg-gray-200               rounded-full               px-3               py-1               text-sm               font-semibold               text-gray-700               mr-2               mb-2             "             >#travel</span           > <a href="#" class="deleteBtn bg-red-500 hover:bg-red-700 text-white text-center py-2 px-4 rounded-full " onClick=deleteHandler('` +
             doc.id +
             `','` +
             doc.data().name +
@@ -98,6 +99,7 @@ function renderMedia() {
           </a>   </div>       </div>`
         );
       });
+      getUserPermission();
     })
     .catch((error) => {
       console.log("Error getting documents: ", error);
@@ -133,6 +135,24 @@ function deleteHandler(id, storageName) {
 
 function navigatetoDriveMenu() {
   window.location.replace("index.html");
+}
+
+//list of access
+function loadaccesslist() {
+  document.getElementById("accesslist").innerHTML = "";
+  db.collection("drive" + "/" + g_active_drive + "/" + "users")
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        $("#accesslist").append(
+          "<p>" + doc.id + "=>" + doc.data().accessType + "</p>"
+        );
+      });
+      getUserPermission();
+    })
+    .catch((error) => {
+      console.log("Error getting documents: ", error);
+    });
 }
 
 //access
@@ -218,7 +238,7 @@ function getUserPermission() {
         }
       } else {
         // doc.data() will be undefined in this case
-        console.log("No such document!");
+        // console.log("No such document!");
       }
     })
     .catch((error) => {
@@ -233,8 +253,20 @@ function revokeModifications(type) {
     document.getElementById("modal-toggle").remove();
     document.getElementById("uploader").style.visibility = "hidden";
     document.getElementById("uploader").remove();
+    var items = document.getElementsByClassName("deleteBtn");
+    for (var i = 0; i < items.length; i++) {
+      items[i].style.visibility = "hidden";
+      items[i].remove();
+    }
   } else if (type === "Read_Upload") {
     document.getElementById("modal-toggle").style.visibility = "hidden";
     document.getElementById("modal-toggle").remove();
+    document.getElementsByClassName("deleteBtn").style.visibility = "hidden";
+    document.getElementsByClassName("deleteBtn").remove();
+    var items = document.getElementsByClassName("deleteBtn");
+    for (var i = 0; i < items.length; i++) {
+      items[i].style.visibility = "hidden";
+      items[i].remove();
+    }
   }
 }
