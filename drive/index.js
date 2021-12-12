@@ -3,6 +3,7 @@ $(document).ready(function () {
   const user = localStorage.getItem("sessionname");
   global_user = user;
   console.log(user);
+  getUserName(user);
   getnameforcurrentDrive();
 
   var usersRef = db.collection("users").doc(global_user);
@@ -22,6 +23,11 @@ $(document).ready(function () {
     .catch((error) => {
       console.log("Error getting document:", error);
     });
+
+  $("#createNewDriveel").submit(function (e) {
+    e.preventDefault();
+    createNewDrive();
+  });
 });
 
 const firebaseConfig = {
@@ -55,9 +61,9 @@ function getDriveDetaile(driveid) {
         console.log(doc.data().name);
 
         $("#root").append(
-          ` <div class="max-w-sm rounded overflow-hidden shadow-lg">         <img           class="w-full"           src="https://www.mindmeister.com/blog/wp-content/uploads/2019/03/Document-Writing.png"           alt="Sunset in the mountains"         />         <div class="px-6 py-4">           <div class="font-bold text-xl mb-2">` +
+          ` <div class="max-w-sm rounded overflow-hidden shadow-lg p-2">         <img   class="w-full"   src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/2048px-OneDrive_Folder_Icon.svg.png"           alt="Sunset in the mountains"         />         <div class="px-6 py-4">           <div class="font-bold text-xl mb-2">` +
             doc.data().name +
-            `</div>           <p class="text-gray-700 text-base">             Lorem ipsum dolor sit amet, consectetur adipisicing elit.             Voluptatibus quia, nulla! Maiores et perferendis eaque,             exercitationem praesentium nihil.           </p>         </div>         <div class="px-6 pt-4 pb-2">           <span             class=" bg-blue-500
+            `</div>           <p class="text-gray-700 text-base">         </p>         </div>         <div class="px-6 pt-4 pb-2">           <span             class=" bg-blue-500
             hover:bg-blue-700
             text-white text-center
             py-2
@@ -112,10 +118,12 @@ function getnameforcurrentDrive() {
 }
 
 const createNewDrive = async () => {
+  toggleModal("authentication-modal", false);
   await getnameforcurrentDrive();
   var name = new_drive_name;
   console.log("nn:", name);
   var ac_name = document.getElementById("drive_name").value;
+  document.getElementById("drive_name").value = "";
   var u_name = "";
   var assigned_drives = "";
   var usersRef = db.collection("users").doc(global_user);
@@ -198,5 +206,23 @@ function Logout() {
     })
     .catch((error) => {
       console.log(error);
+    });
+}
+
+function getUserName(user) {
+  db.collection("users")
+    .doc(user)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        //console.log(doc.data().name);
+        document.getElementById("name_user").innerHTML =
+          "Hi " + doc.data().name.split(" ")[0];
+      } else {
+        console.log("No such document!");
+      }
+    })
+    .catch((error) => {
+      console.log("Error getting document:", error);
     });
 }

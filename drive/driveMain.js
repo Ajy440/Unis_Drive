@@ -56,6 +56,7 @@ function uploadHandler() {
     () => {
       uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
         console.log("File available at", downloadURL);
+        document.getElementById("uploader").value = "";
         document.getElementById("uploadeAlert").style.visibility = "hidden";
         addFileinfotodb(downloadURL, fileName);
       });
@@ -116,7 +117,7 @@ function renderMedia() {
               doc.data().url +
               `           alt="Sunset in the mountains"         />         <div class="px-6 py-4">           <div class="font-bold text-xl mb-2">` +
               doc.data().name +
-              `</div>      </div>         <div class="px-6 pt-4 pb-2">           <span             class="               inline-block               bg-gray-200               rounded-full               px-3               py-1               text-sm               font-semibold               text-gray-700               mr-2               mb-2             "             >#photography</span           >           <span             class="               inline-block               bg-gray-200               rounded-full               px-3               py-1               text-sm               font-semibold               text-gray-700               mr-2               mb-2             "             >#travel</span           > <a href="#" class="deleteBtn bg-red-500 hover:bg-red-700 text-white text-center py-2 px-4 rounded-full " onClick=deleteHandler('` +
+              `</div>      </div>         <div class="px-6 pt-4 pb-2">  <a href="#" class="self-end deleteBtn bg-red-500 hover:bg-red-700 text-white text-center py-2 px-4 rounded-full " onClick=deleteHandler('` +
               doc.id +
               `','` +
               doc.data().name +

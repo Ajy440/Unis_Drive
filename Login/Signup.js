@@ -1,5 +1,6 @@
 $(document).ready(function () {
   console.log("ready!");
+  hideload();
 
   $(".signupForm").submit(function (e) {
     e.preventDefault();
@@ -22,6 +23,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
 function singupHandler() {
+  showload();
   var email = document.getElementById("email").value;
   var password = document.getElementById("pass").value;
   var namex = document.getElementById("name").value;
@@ -43,6 +45,7 @@ function singupHandler() {
         })
         .then(() => {
           console.log("Document successfully written!");
+          hideload();
           window.location.replace("Login.html");
         })
         .catch((error) => {
@@ -60,4 +63,12 @@ function singupHandler() {
       console.log(errorMessage);
       // ..
     });
+}
+
+function showload() {
+  document.getElementById("lg").style.visibility = "visible";
+}
+
+function hideload() {
+  document.getElementById("lg").style.visibility = "hidden";
 }
